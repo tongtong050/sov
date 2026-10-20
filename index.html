@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Short Video Ops 是运行在 Obsidian 中的短视频创作与复盘插件。首批内测仅开放 10 人，内测价 299 元，含三个月社群、直播课与一对一 AI 学习辅导。">
+  <meta name="theme-color" content="#ebe5e3">
+  <title>Short Video Ops｜短视频创作与复盘工作台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ebe5e3;
+      --surface: #e1dad7;
+      --paper: #f7f3f1;
+      --ink: #2b2622;
+      --muted: #625956;
+      --green: #0f7d45;
+      --green-dark: #0a6036;
+      --dark: #272320;
+      --gap: 8px;
+      --ease: cubic-bezier(.22, 1, .36, 1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.5 "DM Sans", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button { font: inherit; }
+    a { color: inherit; }
+    img { display: block; max-width: 100%; }
+    h1, h2, h3, p { margin: 0; }
+    h1, h2, h3 { line-height: 1.04; letter-spacing: -.045em; }
+    h2 { font-size: clamp(32px, 4.6vw, 68px); }
+    h3 { font-size: clamp(22px, 2.2vw, 32px); }
+    p { text-wrap: pretty; }
+    .skip { position: absolute; left: 12px; top: -100px; z-index: 10; padding: 12px 18px; background: var(--green); color: white; }
+    .skip:focus { top: 12px; }
+    :focus-visible { outline: 3px solid var(--green); outline-offset: 4px; }
+    .tile:focus-visible, .join:focus-visible { outline-offset: -5px; }
+    .page { padding: var(--gap); max-width: 1920px; margin: auto; }
+    .tile { background: var(--surface); border-radius: 3px; min-width: 0; }
+    .nav { display: grid; grid-template-columns: minmax(190px, 1fr) minmax(430px, 1.45fr) auto; gap: var(--gap); min-height: 62px; margin-bottom: var(--gap); }
+    .brand { display: flex; align-items: center; padding: 10px 22px; background: var(--paper); text-decoration: none; font-size: 20px; font-weight: 700; letter-spacing: -.04em; white-space: nowrap; }
+    .nav-links { display: flex; justify-content: flex-end; align-items: center; gap: clamp(20px, 2.4vw, 46px); padding: 8px 28px; background: var(--paper); }
+    .nav-links a, .text-link { text-decoration: underline; text-decoration-color: transparent; text-underline-offset: .25em; transition: text-decoration-color .18s ease; }
+    .nav-links a:hover, .text-link:hover { text-decoration-color: currentColor; }
+    .join { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 10px 26px; border: 0; border-radius: 3px; background: var(--green); color: white; text-decoration: none; font-weight: 700; white-space: nowrap; transition: background-color .18s ease, transform .14s var(--ease); }
+    .join:hover { background: var(--green-dark); }
+    .join:active { transform: scale(.97); }
+    .nav .join { min-height: 62px; }
+    .hero { display: grid; grid-template-columns: 1.18fr 1fr .86fr .72fr; grid-template-rows: minmax(360px, 54vh) minmax(170px, 20vh); gap: var(--gap); }
+    .hero-name { grid-column: 1 / 3; padding: clamp(20px, 2vw, 34px); background: var(--paper); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+    .hero-name h1 { font-size: clamp(66px, 10.4vw, 176px); line-height: .84; letter-spacing: -.075em; font-weight: 700; }
+    .hero-name h1 span { display: block; }
+    .hero-name p { font-size: clamp(19px, 2vw, 29px); font-weight: 600; line-height: 1.25; max-width: 21ch; }
+    .hero-statement { grid-column: 3; padding: clamp(22px, 2.1vw, 36px); background: var(--dark); color: white; display: flex; flex-direction: column; justify-content: space-between; }
+    .hero-statement p:first-child { font-size: clamp(23px, 2.5vw, 37px); line-height: 1.17; font-weight: 600; letter-spacing: -.035em; }
+    .hero-statement p:last-child { font-size: 16px; color: #ded6d1; max-width: 23ch; }
+    .hero-price { grid-column: 4; padding: clamp(22px, 2vw, 34px); background: var(--green); color: white; display: flex; flex-direction: column; justify-content: space-between; }
+    .hero-price strong { display: block; font-size: clamp(62px, 5.5vw, 96px); line-height: 1; letter-spacing: -.075em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .hero-price .price-copy { font-size: 19px; font-weight: 600; margin-top: 10px; }
+    .hero-price .join { background: white; color: var(--green-dark); width: 100%; }
+    .hero-price .join:hover { background: #e5f3ea; }
+    .hero-price small { font-size: 16px; }
+    .hero-flow { grid-column: 1 / 3; padding: 24px 30px; display: flex; flex-direction: column; justify-content: space-between; background: #d5cdc9; }
+    .hero-flow h2 { font-size: clamp(24px, 2.2vw, 34px); }
+    .flow-list { display: flex; flex-wrap: wrap; gap: 8px; }
+    .flow-list span { padding: 11px 15px; background: var(--paper); font-size: 16px; font-weight: 600; }
+    .hero-proof { grid-column: 3 / 5; padding: 22px 28px; background: var(--paper); display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: center; }
+    .hero-proof p { font-size: clamp(18px, 1.8vw, 26px); font-weight: 600; line-height: 1.3; max-width: 18ch; }
+    .mini-ui { background: #faf8f7; padding: 12px; color: #34302d; font-size: 13px; line-height: 1.4; }
+    .mini-ui .ui-head { padding: 8px 10px; background: #e6e2df; font-weight: 700; }
+    .mini-ui .ui-row { padding: 8px 10px; margin-top: 5px; background: white; }
+    .mini-ui .ui-row.active { background: #dbeadf; color: #0b6033; font-weight: 700; }
+    .photo-strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--gap); margin-top: var(--gap); }
+    .photo-strip figure { position: relative; height: clamp(175px, 21vw, 300px); overflow: hidden; margin: 0; background: var(--surface); }
+    .photo-strip img { position: absolute; top: 50%; left: 0; width: 300%; max-width: none; height: auto; transform: translateY(-50%); }
+    .photo-strip figure:nth-child(2) img { left: -100%; }
+    .photo-strip figure:nth-child(3) img { left: -200%; }
+    .section { margin-top: clamp(96px, 9vw, 160px); }
+    .section-heading { padding: 0 16px 30px; display: flex; justify-content: space-between; align-items: end; gap: 36px; }
+    .section-heading p { max-width: 33ch; font-size: 18px; }
+    .module-board { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: start; }
+    .module-index { grid-column: span 4; padding: 24px; background: var(--dark); color: white; }
+    .module-index h3 { margin-bottom: 20px; }
+    .module-buttons { display: grid; gap: 6px; }
+    .module-buttons button { min-height: 49px; width: 100%; border: 0; border-radius: 2px; text-align: left; padding: 10px 16px; background: #3a3531; color: white; cursor: pointer; transition: background-color .18s ease, transform .14s var(--ease); }
+    .module-buttons button:hover { background: #48413d; }
+    .module-buttons button:active { transform: scale(.98); }
+    .module-buttons button[aria-pressed="true"] { background: var(--green); }
+    .module-detail { grid-column: span 8; padding: clamp(26px, 3vw, 48px); background: var(--paper); display: flex; flex-direction: column; gap: 20px; min-height: 445px; }
+    .module-detail h3 { font-size: clamp(36px, 4vw, 62px); }
+    .module-detail .module-description { max-width: 39ch; font-size: clamp(18px, 1.6vw, 23px); line-height: 1.4; }
+    .module-points { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; padding: 0; margin: 0; list-style: none; }
+    .module-points li { min-height: 104px; padding: 16px; background: var(--surface); font-size: 16px; line-height: 1.4; }
+    .module-detail .detail-foot { margin-top: auto; font-size: 16px; color: var(--muted); }
+    .module-note { grid-column: span 12; padding: 25px 28px; min-height: 126px; background: #d2cbc6; display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; align-items: end; }
+    .module-note p:first-child { font-size: clamp(24px, 2.4vw, 37px); font-weight: 600; line-height: 1.2; letter-spacing: -.035em; max-width: 25ch; }
+    .module-note p:last-child { font-size: 16px; max-width: 40ch; }
+    .path { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
+    .path article { min-height: 230px; padding: 26px; display: flex; flex-direction: column; justify-content: space-between; }
+    .path article:nth-child(1) { background: #d5cbc6; }
+    .path article:nth-child(2) { background: #e7dfdb; }
+    .path article:nth-child(3) { background: #d5e3d8; }
+    .path article:nth-child(4) { background: #c8d8cd; }
+    .path h3 { max-width: 8ch; }
+    .path p { max-width: 25ch; font-size: 16px; }
+    .offer { display: grid; grid-template-columns: 1.1fr .9fr; gap: var(--gap); }
+    .offer-main { padding: clamp(28px, 4vw, 64px); min-height: 510px; background: var(--green); color: white; display: flex; flex-direction: column; justify-content: space-between; }
+    .offer-main h2 { max-width: 11ch; }
+    .offer-main .offer-price { font-size: clamp(88px, 12vw, 190px); letter-spacing: -.08em; font-weight: 700; line-height: .8; font-variant-numeric: tabular-nums; }
+    .offer-main p { font-size: 19px; }
+    .offer-main .join { align-self: flex-start; background: white; color: var(--green-dark); min-width: 200px; }
+    .offer-main .join:hover { background: #e5f3ea; }
+    .offer-includes { padding: clamp(28px, 3vw, 48px); background: var(--paper); }
+    .offer-includes h3 { margin-bottom: 30px; }
+    .include-list { display: grid; gap: 8px; }
+    .include-list div { padding: 18px 20px; background: var(--surface); }
+    .include-list strong { display: block; font-size: 20px; line-height: 1.2; margin-bottom: 5px; }
+    .include-list p { font-size: 16px; }
+    .offer-note { margin-top: 22px; font-size: 15px; color: var(--muted); }
+    .faq { display: grid; grid-template-columns: 1fr 1.6fr; gap: var(--gap); }
+    .faq-title { padding: 30px; background: var(--dark); color: white; }
+    .faq-list { display: grid; gap: var(--gap); }
+    .faq details { padding: 0 24px; background: var(--paper); }
+    .faq summary { min-height: 75px; display: flex; align-items: center; cursor: pointer; font-size: 21px; font-weight: 600; list-style: none; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; margin-left: auto; font-size: 30px; font-weight: 400; }
+    .faq details[open] summary::after { content: "−"; }
+    .faq details p { padding: 0 28px 24px 0; font-size: 17px; max-width: 60ch; }
+    .contact { display: grid; grid-template-columns: 1.15fr .85fr; gap: var(--gap); scroll-margin-top: 16px; }
+    .contact-copy { padding: clamp(28px, 4vw, 62px); background: var(--dark); color: white; display: flex; flex-direction: column; justify-content: space-between; gap: 30px; min-height: 370px; }
+    .contact-copy h2 { max-width: 10ch; }
+    .contact-copy p { max-width: 38ch; font-size: 19px; }
+    .contact-copy .contact-instruction { font-size: clamp(24px, 2.5vw, 37px); font-weight: 600; line-height: 1.3; }
+    .contact-copy .contact-instruction strong { font-weight: 700; }
+    .contact-copy .contact-meta { font-size: 16px; color: #ded6d1; }
+    .qr-tile { padding: 32px; min-height: 370px; background: var(--green); color: white; display: grid; grid-template-columns: minmax(0, 1fr) minmax(180px, 300px); gap: 24px; align-items: center; }
+    .qr-tile h3 { margin-bottom: 16px; }
+    .qr-tile p { font-size: 17px; max-width: 22ch; }
+    .qr-tile img { width: 100%; height: auto; aspect-ratio: auto; }
+    .qr-tile .qr-frame { display: block; width: min(100%, 300px); justify-self: end; padding: 12px; background: white; }
+    .footer { margin-top: var(--gap); padding: 25px 30px 20px; min-height: 190px; background: var(--paper); display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; }
+    .footer p { font-size: 15px; }
+    .footer strong { display: block; font-size: clamp(56px, 13vw, 220px); letter-spacing: -.08em; line-height: .8; white-space: nowrap; }
+    @media (prefers-reduced-motion: no-preference) {
+      .will-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .8s var(--ease); }
+      .will-reveal.is-in { opacity: 1; transform: none; }
+      .hero-proof .mini-ui { animation: open-ui 1.1s cubic-bezier(.76, 0, .24, 1) .45s both; }
+      @keyframes open-ui { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-name, .hero-statement, .hero-price, .hero-flow, .hero-proof { animation: rise .8s var(--ease) both; }
+      .hero-statement { animation-delay: .1s; }
+      .hero-price { animation-delay: .2s; }
+      .hero-flow { animation-delay: .28s; }
+      .hero-proof { animation-delay: .36s; }
+      @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+      .module-detail h3 { transition: opacity .2s ease, transform .2s var(--ease); }
+      .module-detail.change h3 { animation: swap .35s var(--ease); }
+      @keyframes swap { from { opacity: .3; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    }
+    @media (max-width: 1050px) {
+      .nav { grid-template-columns: 1fr auto; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1.2fr 1fr; grid-template-rows: auto auto auto; }
+      .hero-name { grid-column: 1; min-height: 400px; }
+      .hero-statement { grid-column: 2; }
+      .hero-price { grid-column: 1; min-height: 300px; }
+      .hero-flow { grid-column: 2; }
+      .hero-proof { grid-column: 1 / 3; }
+      .module-index { grid-column: span 5; }
+      .module-detail { grid-column: span 7; }
+      .module-points { grid-template-columns: 1fr; }
+      .module-points li { min-height: 0; }
+      .module-note { grid-column: span 12; }
+      .path { grid-template-columns: 1fr 1fr; }
+      .qr-tile { grid-template-columns: 1fr; }
+      .qr-tile .qr-frame { justify-self: start; }
+    }
+    @media (max-width: 640px) {
+      :root { --gap: 6px; }
+      body { font-size: 16px; }
+      .nav { min-height: 54px; }
+      .brand { padding: 10px 14px; font-size: 17px; }
+      .nav .join { min-height: 54px; padding: 8px 14px; font-size: 15px; }
+      .hero { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .hero-name { grid-column: 1 / 3; min-height: 310px; padding: 20px; }
+      .hero-name h1 { font-size: clamp(62px, 17vw, 104px); }
+      .hero-name p { font-size: 20px; }
+      .hero-price { grid-column: 1 / 3; grid-row: 2; min-height: 310px; }
+      .hero-price strong { font-size: clamp(82px, 23vw, 116px); }
+      .hero-statement { grid-column: 1 / 3; min-height: 240px; }
+      .hero-flow { grid-column: 1 / 3; min-height: 240px; }
+      .hero-proof { grid-column: 1 / 3; grid-template-columns: 1fr; }
+      .photo-strip { grid-template-columns: 1fr 1fr; }
+      .photo-strip figure { height: 210px; }
+      .photo-strip figure:nth-child(3) { grid-column: 1 / 3; height: 210px; }
+      .photo-strip figure:nth-child(3) img { width: 150%; left: -100%; }
+      .section { margin-top: 82px; }
+      .section-heading { display: block; padding: 0 10px 24px; }
+      .section-heading p { margin-top: 14px; }
+      .module-board { display: block; }
+      .module-board > * + * { margin-top: var(--gap); }
+      .module-index { padding: 22px; }
+      .module-buttons { grid-template-columns: 1fr 1fr; }
+      .module-buttons button { min-height: 52px; padding: 9px 11px; font-size: 15px; }
+      .module-detail { min-height: 0; padding: 25px; }
+      .module-note { min-height: 0; display: block; }
+      .module-note p + p { margin-top: 16px; }
+      .path { display: block; }
+      .path article { min-height: 185px; margin-top: var(--gap); }
+      .offer, .faq, .contact { display: block; }
+      .offer > * + *, .faq > * + *, .contact > * + * { margin-top: var(--gap); }
+      .offer-main { min-height: 435px; }
+      .offer-main .offer-price { font-size: clamp(88px, 25vw, 130px); }
+      .offer-includes { padding: 25px; }
+      .faq-title { padding: 25px; }
+      .faq details { padding: 0 18px; }
+      .faq summary { min-height: 68px; font-size: 18px; }
+      .contact-copy { min-height: 0; }
+      .qr-tile { padding: 26px; grid-template-columns: 1fr; }
+      .qr-tile .qr-frame { max-width: 300px; }
+      .footer { min-height: 120px; }
+      .footer strong { font-size: 13vw; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <div class="page">
+    <header class="nav" aria-label="主导航">
+      <a class="brand tile" href="#top">Short Video Ops</a>
+      <nav class="nav-links tile" aria-label="页面导航">
+        <a href="#modules">功能模块</a>
+        <a href="#workflow">创作流程</a>
+        <a href="#offer">内测权益</a>
+        <a href="#faq">常见问题</a>
+      </nav>
+      <a class="join" href="#wechat">加入内测</a>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top" aria-label="Short Video Ops 内测介绍">
+        <div class="tile hero-name">
+          <h1><span>Short</span><span>Video Ops</span></h1>
+          <p>把短视频创作，收进自己的 Obsidian 工作台。</p>
+        </div>
+        <div class="tile hero-statement">
+          <p>让每一次选题、创作与复盘，都有迹可循。</p>
+          <p>本地 Markdown 内容，连接知识、脚本、发布记录与反馈。</p>
+        </div>
+        <div class="tile hero-price">
+          <div><strong>¥299</strong><p class="price-copy">内测价 · 原价 <s>¥699</s></p></div>
+          <div><p>仅开放 10 个名额，招满即停</p><a class="join" href="#wechat">加入内测</a></div>
+          <small>插件 + 三个月学习权益</small>
+        </div>
+        <div class="tile hero-flow">
+          <h2>从灵感到复盘</h2>
+          <div class="flow-list" aria-label="创作流程"><span>笔记</span><span>选题</span><span>脚本</span><span>发布</span><span>复盘</span></div>
+        </div>
+        <div class="tile hero-proof">
+          <p>今天要做什么，下一步到哪里，一眼看清。</p>
+          <div class="mini-ui" data-ui aria-label="功能示意：创作工作流">
+            <div class="ui-head">Short Video Ops · 工作流</div>
+            <div class="ui-row">策略与受众　已建立创作方向</div>
+            <div class="ui-row active">选题与参考　整理创作依据</div>
+            <div class="ui-row">视频工作台　管理脚本与发布</div>
+            <div class="ui-row">知识引擎　沉淀复盘经验</div>
+          </div>
+        </div>
+      </section>
+      <div class="photo-strip" aria-label="短视频创作场景示意">
+        <figure class="tile"><img src="landing-assets/creator-triptych.png" width="2172" height="724" alt="桌上摊开的分镜笔记与拍摄相机" loading="lazy"></figure>
+        <figure class="tile"><img src="landing-assets/creator-triptych.png" width="2172" height="724" alt="拍摄前调整相机与麦克风" loading="lazy"></figure>
+        <figure class="tile"><img src="landing-assets/creator-triptych.png" width="2172" height="724" alt="对照纸面分镜复查创作安排" loading="lazy"></figure>
+      </div>
+
+      <section class="section" id="modules" aria-labelledby="modules-title">
+        <div class="section-heading"><h2 id="modules-title">七大模块，围绕一条创作线</h2></div>
+        <div class="module-board">
+          <div class="tile module-index"><h3>选择一个模块</h3><div class="module-buttons" aria-label="功能模块切换">
+            <button type="button" aria-pressed="true" data-module="dashboard">今日驾驶舱</button>
+            <button type="button" aria-pressed="false" data-module="pipeline">内容管线</button>
+            <button type="button" aria-pressed="false" data-module="strategy">策略与受众</button>
+            <button type="button" aria-pressed="false" data-module="topics">选题与参考</button>
+            <button type="button" aria-pressed="false" data-module="video">视频工作台</button>
+            <button type="button" aria-pressed="false" data-module="data">数据采集与校准</button>
+            <button type="button" aria-pressed="false" data-module="knowledge">知识引擎</button>
+          </div></div>
+          <div class="tile module-detail" aria-live="polite"><h3 id="module-name">今日驾驶舱</h3><p class="module-description" id="module-description">汇总当前创作状态、阻塞与待处理任务，把注意力放回今天最该推进的一件事。</p><ul class="module-points" id="module-points"><li>看清当前进度与待处理事项</li><li>找到阻塞创作的关键问题</li><li>确定今天最值得推进的一步</li></ul><p class="detail-foot" id="module-path">从现状出发，找到下一步。</p></div>
+          <div class="tile module-note"><p>创作记录在自己的 Vault 里持续生长。</p><p>插件运行在 Obsidian 中；普通内容保存在可读、可编辑的 Markdown 里。</p></div>
+        </div>
+      </section>
+
+      <section class="section" id="workflow" aria-labelledby="workflow-title">
+        <div class="section-heading"><h2 id="workflow-title">一条能回看的创作路径</h2><p>每一段工作都留下依据，发布后的结果继续帮助下一条内容。</p></div>
+        <div class="path">
+          <article class="tile"><h3>确定方向</h3><p>梳理账号定位、受众痛点、已有知识与外部参考，让选题有来源。</p></article>
+          <article class="tile"><h3>组织创作</h3><p>在单视频工作台中管理脚本、拍摄准备与发布信息。</p></article>
+          <article class="tile"><h3>回收表现</h3><p>发布后由你主动采集数据，比较原先判断与真实表现。</p></article>
+          <article class="tile"><h3>沉淀方法</h3><p>把复盘变成受众观察、稳定写法和长期可用的知识资产。</p></article>
+        </div>
+      </section>
+
+      <section class="section" id="offer" aria-labelledby="offer-title">
+        <div class="offer">
+          <div class="tile offer-main"><h2 id="offer-title">首批内测，只开放 10 人</h2><div><p>原价 <s>¥699</s>　内测价</p><div class="offer-price">¥299</div></div><a class="join" href="#wechat">加入内测</a></div>
+          <div class="tile offer-includes"><h3>一次加入，获得这些权益</h3><div class="include-list">
+            <div><strong>Short Video Ops 插件</strong><p>在 Obsidian 中使用短视频创作与复盘工作流。</p></div>
+            <div><strong>三个月社群权益</strong><p>与同批创作者交流实践问题和作品进展。</p></div>
+            <div><strong>付费直播课观看资格</strong><p>课程覆盖编程基础、AI 基础、GitHub 基础和 AI 工具使用。</p></div>
+            <div><strong>一对一 AI 学习辅导</strong><p>围绕你的学习进度与作品方向，学习从零开始完成 Vibe Coding 作品。</p></div>
+          </div><p class="offer-note">内测服务的具体安排以加入后的说明为准。</p></div>
+        </div>
+      </section>
+
+      <section class="section faq" id="faq" aria-labelledby="faq-title">
+        <div class="tile faq-title"><h2 id="faq-title">你可能还想知道</h2></div>
+        <div class="faq-list">
+          <details class="tile"><summary>零基础可以参加吗？</summary><p>可以。学习内容从编程、AI 与 GitHub 基础开始，再结合 AI 工具练习，逐步推进自己的 Vibe Coding 作品。</p></details>
+          <details class="tile"><summary>插件需要什么环境？</summary><p>插件运行在 Obsidian 中。涉及本地 CLI、Python 或平台采集的功能需要桌面端及相应环境；移动端主要用于只读查看。</p></details>
+          <details class="tile"><summary>插件会自动帮我发布视频吗？</summary><p>不会。发布信息由你登记；平台登录、读取作品与数据采集也由你主动发起。</p></details>
+          <details class="tile"><summary>内测价包含多久的学习权益？</summary><p>包含三个月社群权益、付费直播课观看资格和一对一 AI 学习辅导。具体课程与辅导安排请添加微信咨询。</p></details>
+        </div>
+      </section>
+
+      <section class="section contact" id="wechat" aria-labelledby="wechat-title">
+        <div class="tile contact-copy"><h2 id="wechat-title">加入首批内测</h2><p>扫描二维码添加微信，了解内测安排与加入方式。</p><p class="contact-instruction">添加后，请发送 <strong>“内测”</strong></p><p class="contact-meta">内测价 ¥299 · 仅开放 10 个名额</p></div>
+        <div class="tile qr-tile"><div><h3>微信联系</h3><p>电脑端用微信扫一扫；手机端长按二维码识别。</p></div><a class="qr-frame" href="landing-assets/wechat-qr.png" target="_blank" rel="noopener" aria-label="打开微信二维码大图"><img src="landing-assets/wechat-qr.png" width="523" height="529" alt="加入 Short Video Ops 内测的微信二维码"></a></div>
+      </section>
+    </main>
+    <footer class="footer tile"><p>Short Video Ops · Obsidian 社区插件内测</p><strong>Short Video Ops</strong></footer>
+  </div>
+  <script>
+    const modules = {
+      dashboard: ["今日驾驶舱", "汇总当前创作状态、阻塞与待处理任务，把注意力放回今天最该推进的一件事。", "从现状出发，找到下一步。", ["看清当前进度与待处理事项", "找到阻塞创作的关键问题", "确定今天最值得推进的一步"]],
+      pipeline: ["内容管线", "把灵感、候选、制作与已发布内容放进同一条路径，看到每条内容走到哪里。", "从零散想法，走向持续创作。", ["按创作阶段查看内容", "区分候选、制作与发布状态", "让每条内容都有清楚的下一步"]],
+      strategy: ["策略与受众", "整理账号定位、受众场景、内容支柱和更新节奏，让每次选题都有明确边界。", "先知道为谁创作，再决定做什么。", ["记录已确认的账号定位", "明确受众与内容支柱", "根据证据调整创作方向"]],
+      topics: ["选题与参考", "把痛点、个人知识、热点和对标研究收拢为可追溯的选题依据。", "保留来源，也保留自己的判断。", ["汇集痛点与知识线索", "记录热点、对标与来源", "比较价值、差异与风险"]],
+      video: ["视频工作台", "围绕一条视频组织脚本、拍摄准备、发布记录与复盘，不让版本和进度散落各处。", "一条视频，一个清晰的工作区。", ["管理脚本与拍摄准备", "登记发布版本和信息", "把复盘接回下一条创作"]],
+      data: ["数据采集与校准", "主动读取已发布作品的表现，比较预测与结果，把真实反馈带回下一轮创作。", "发布后再用数据检验判断。", ["主动发起作品数据读取", "区分原始数据与推断", "对照预测与实际表现"]],
+      knowledge: ["知识引擎", "把日常笔记、知识卡片与复盘所得连接起来，积累可以反复使用的创作材料。", "让经验留在自己的知识库。", ["沉淀可回看的知识卡片", "保留观点与来源的联系", "复用笔记和复盘经验"]]
+    };
+    const detail = document.querySelector(".module-detail");
+    document.querySelectorAll("[data-module]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelector('[data-module][aria-pressed="true"]').setAttribute("aria-pressed", "false");
+        button.setAttribute("aria-pressed", "true");
+        const [name, description, path, points] = modules[button.dataset.module];
+        document.querySelector("#module-name").textContent = name;
+        document.querySelector("#module-description").textContent = description;
+        document.querySelector("#module-path").textContent = path;
+        document.querySelectorAll("#module-points li").forEach((item, index) => { item.textContent = points[index]; });
+        detail.classList.remove("change");
+        void detail.offsetWidth;
+        detail.classList.add("change");
+      });
+    });
+    if ("IntersectionObserver" in window) {
+      const sections = document.querySelectorAll(".section-heading h2, .section-heading p, .module-board > *, .path article, .offer > *, .faq-title, .faq details, .contact > *");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-in");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: .05, rootMargin: "0px 0px -4% 0px" });
+      sections.forEach((element) => {
+        element.classList.add("will-reveal");
+        observer.observe(element);
+      });
+    }
+  </script>
+</body>
+</html>
