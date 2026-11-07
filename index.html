@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Short Video Ops 是运行在 Obsidian 中的短视频创作与复盘插件。首批内测仅开放 10 人，内测价 299 元，含三个月社群、直播课与一对一 AI 学习辅导。">
+  <meta name="description" content="Short Video Ops 是运行在 Obsidian 中的短视频创作与复盘插件。包含一年答疑教学内容，带你学习制作同款智能体。">
   <meta name="theme-color" content="#ebe5e3">
   <title>Short Video Ops｜短视频创作与复盘工作台</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -78,6 +78,75 @@
     .photo-strip img { position: absolute; top: 50%; left: 0; width: 300%; max-width: none; height: auto; transform: translateY(-50%); }
     .photo-strip figure:nth-child(2) img { left: -100%; }
     .photo-strip figure:nth-child(3) img { left: -200%; }
+    .motion-board { background: var(--dark); color: white; padding: clamp(18px, 2.4vw, 36px); overflow: hidden; }
+    .motion-nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    .motion-nav button { min-height: 44px; border: 1px solid #69615b; background: #39342f; color: #e8e0db; padding: 8px 15px; border-radius: 2px; cursor: pointer; }
+    .motion-nav button[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: white; }
+    .motion-stage { position: relative; min-height: 430px; background: #ede9e3; color: var(--ink); overflow: hidden; }
+    .motion-scene { position: absolute; inset: 0; padding: clamp(20px, 3vw, 48px); display: grid; grid-template-columns: minmax(240px, .75fr) minmax(0, 1.25fr); gap: 28px; align-items: center; }
+    .motion-scene[hidden] { display: none; }
+    .motion-copy { position: relative; z-index: 3; align-self: stretch; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 20px; }
+    .motion-copy small { color: var(--green-dark); font-weight: 700; letter-spacing: .12em; }
+    .motion-copy h3 { font-size: clamp(30px, 3.5vw, 58px); max-width: 12ch; }
+    .motion-copy p { max-width: 38ch; color: var(--muted); font-size: clamp(15px, 1.4vw, 20px); }
+    .motion-next { min-height: 48px; border: 0; background: var(--green); color: white; padding: 10px 20px; font-weight: 700; cursor: pointer; }
+    .motion-art { position: relative; height: 330px; min-width: 0; perspective: 1100px; }
+    .motion-card { position: absolute; padding: 22px; background: white; color: var(--ink); border-top: 5px solid var(--green); box-shadow: 12px 16px 0 #c6c8bd; font-weight: 700; line-height: 1.3; }
+    .motion-card small { display: block; color: var(--green-dark); font-size: 12px; margin-bottom: 14px; letter-spacing: .1em; }
+    .hot-card { width: 54%; height: 170px; top: 65px; left: 21%; transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+    .hot-card:nth-child(1) { --x: -34%; --y: -23px; --r: -9deg; }
+    .hot-card:nth-child(2) { --x: 8%; --y: 10px; --r: 3deg; border-color: #8064da; }
+    .hot-card:nth-child(3) { --x: 43%; --y: 37px; --r: 10deg; }
+    .motion-badge { position: absolute; right: 7%; bottom: 9px; z-index: 2; padding: 12px 18px; background: var(--green); color: white; font-size: 24px; font-weight: 700; }
+    .extract-link { position: absolute; top: 0; left: 1%; right: 1%; padding: 13px 17px; background: #d8dfd4; border-left: 5px solid var(--green); font-size: 14px; font-weight: 700; }
+    .extract-card { width: 43%; height: 126px; top: 77px; left: 29%; transform: translate(var(--x), var(--y)) rotate(var(--r)); }
+    .extract-card:nth-of-type(2) { --x: -59%; --y: 0px; --r: -4deg; }
+    .extract-card:nth-of-type(3) { --x: 59%; --y: 0px; --r: 4deg; }
+    .extract-card:nth-of-type(4) { --x: -59%; --y: 145px; --r: 3deg; }
+    .extract-card:nth-of-type(5) { --x: 59%; --y: 145px; --r: -3deg; border-color: #8064da; }
+    .pain-window { position: absolute; inset: 0 0 0 4%; overflow: hidden; transform: rotateY(-9deg); }
+    .pain-stream { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; transform: translateY(0); }
+    .pain-column { display: grid; gap: 9px; }
+    .pain-column:nth-child(2) { transform: translateY(-65px); }
+    .pain-column:nth-child(3) { transform: translateY(-130px); }
+    .pain-slip { padding: 14px; min-height: 92px; background: white; border-top: 4px solid var(--green); font-weight: 700; font-size: 14px; }
+    .pain-picked { position: absolute; z-index: 2; left: 12%; right: 8%; bottom: 13px; padding: 17px 20px; background: var(--green); color: white; font-size: clamp(16px, 1.6vw, 23px); font-weight: 700; box-shadow: 10px 11px 0 #b4bdb0; }
+    .knowledge-card { width: 42%; height: 220px; left: 29%; top: 50px; transform: translateX(var(--x)) rotate(var(--r)); }
+    .knowledge-card:nth-child(1) { --x: -52%; --r: -13deg; }
+    .knowledge-card:nth-child(2) { --x: -18%; --r: -5deg; }
+    .knowledge-card:nth-child(3) { --x: 18%; --r: 5deg; border-color: #8064da; }
+    .knowledge-card:nth-child(4) { --x: 52%; --r: 13deg; }
+    .knowledge-output { position: absolute; right: 0; bottom: 0; z-index: 2; padding: 12px 16px; background: #8064da; color: white; font-weight: 700; }
+    .flip-wrap { position: absolute; width: min(82%, 490px); height: 250px; top: 36px; left: 9%; transform-style: preserve-3d; transform: rotateY(180deg); }
+    .flip-face { position: absolute; inset: 0; padding: 25px; background: white; border-top: 6px solid #8064da; box-shadow: 13px 16px 0 #c6c8bd; backface-visibility: hidden; }
+    .flip-face.back { background: var(--green); color: white; border-color: #8064da; transform: rotateY(180deg); }
+    .flip-face small { display: block; margin-bottom: 25px; font-size: 13px; letter-spacing: .1em; }
+    .flip-face strong { display: block; font-size: clamp(20px, 2vw, 29px); line-height: 1.25; }
+    .script-page { position: absolute; inset: 0; background: white; box-shadow: 14px 17px 0 #c6c8bd; transform: rotateY(-5deg); }
+    .script-bar { padding: 13px 18px; background: #d8dfd4; font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+    .script-lines { padding: 20px; font-size: clamp(15px, 1.45vw, 21px); line-height: 1.5; font-weight: 600; }
+    .script-lines p { min-height: 48px; border-bottom: 1px solid #e3e5df; }
+    .script-history { position: absolute; right: -10px; bottom: -12px; padding: 9px 13px; background: #8064da; color: white; font-size: 13px; font-weight: 700; }
+    @media (prefers-reduced-motion: no-preference) {
+      .motion-scene.is-active { animation: scene-iris .45s var(--ease) both; }
+      .motion-scene.is-active[data-scene="extract"], .motion-scene.is-active[data-scene="script"] { animation-name: scene-push; }
+      .motion-scene.is-active[data-scene="hot"] .hot-card { animation: flock .65s var(--ease) both; animation-delay: calc(var(--i) * 90ms); }
+      .motion-scene.is-active[data-scene="extract"] .extract-card { animation: deal .6s var(--ease) both; animation-delay: calc(var(--i) * 110ms); }
+      .motion-scene.is-active[data-scene="pain"] .pain-stream { animation: pain-scroll 2.6s ease-out both; }
+      .motion-scene.is-active[data-scene="pain"] .pain-picked { animation: pain-focus .55s var(--ease) 1.25s both; }
+      .motion-scene.is-active[data-scene="knowledge"] .knowledge-card { animation: fan .65s var(--ease) both; animation-delay: calc(var(--i) * 80ms); }
+      .motion-scene.is-active[data-scene="topic"] .flip-wrap { animation: flip-reveal .8s var(--ease) .3s both; }
+      .motion-scene.is-active[data-scene="script"] .script-page { animation: document-in .5s var(--ease) both; }
+      @keyframes scene-iris { from { clip-path: circle(0 at 75% 50%); } to { clip-path: circle(125% at 75% 50%); } }
+      @keyframes scene-push { from { transform: translateY(100%); } to { transform: translateY(0); } }
+      @keyframes flock { from { opacity: 0; transform: translate(0, 130px) rotateY(75deg) rotate(18deg) scale(.75); } to { opacity: 1; transform: translate(var(--x), var(--y)) rotate(var(--r)); } }
+      @keyframes deal { from { opacity: 0; transform: translate(0, 50px) rotate(0) scale(.7); } to { opacity: 1; transform: translate(var(--x), var(--y)) rotate(var(--r)); } }
+      @keyframes pain-scroll { from { transform: translateY(-235px); } to { transform: translateY(0); } }
+      @keyframes pain-focus { from { opacity: 0; transform: scale(.7) translateY(60px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+      @keyframes fan { from { opacity: 0; transform: translateX(0) translateY(190px) rotate(0); } to { opacity: 1; transform: translateX(var(--x)) rotate(var(--r)); } }
+      @keyframes flip-reveal { from { transform: rotateY(0); } to { transform: rotateY(180deg); } }
+      @keyframes document-in { from { opacity: 0; transform: translateX(100px) rotateY(-15deg); } to { opacity: 1; transform: rotateY(-5deg); } }
+    }
     .section { margin-top: clamp(96px, 9vw, 160px); }
     .section-heading { padding: 0 16px 30px; display: flex; justify-content: space-between; align-items: end; gap: 36px; }
     .section-heading p { max-width: 33ch; font-size: 18px; }
@@ -147,8 +216,8 @@
     @media (prefers-reduced-motion: no-preference) {
       .will-reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s var(--ease), transform .8s var(--ease); }
       .will-reveal.is-in { opacity: 1; transform: none; }
-      .hero-proof .mini-ui { animation: open-ui 1.1s cubic-bezier(.76, 0, .24, 1) .45s both; }
-      @keyframes open-ui { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+      .hero-proof .mini-ui { animation: open-ui .85s var(--ease) .45s both; }
+      @keyframes open-ui { from { clip-path: circle(0 at 50% 51%); } to { clip-path: circle(85% at 50% 51%); } }
     }
     @media (prefers-reduced-motion: no-preference) {
       .hero-name, .hero-statement, .hero-price, .hero-flow, .hero-proof { animation: rise .8s var(--ease) both; }
@@ -159,7 +228,12 @@
       @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
       .module-detail h3 { transition: opacity .2s ease, transform .2s var(--ease); }
       .module-detail.change h3 { animation: swap .35s var(--ease); }
+      .module-detail.change .module-points li { animation: point-deal .45s var(--ease) both; }
+      .module-detail.change .module-points li:nth-child(2) { animation-delay: .08s; }
+      .module-detail.change .module-points li:nth-child(3) { animation-delay: .16s; }
+      .path article.is-in { transition-delay: calc((var(--step) - 1) * 90ms); }
       @keyframes swap { from { opacity: .3; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+      @keyframes point-deal { from { opacity: 0; transform: translateX(28px) rotateY(-15deg); } to { opacity: 1; transform: none; } }
     }
     @media (max-width: 1050px) {
       .nav { grid-template-columns: 1fr auto; }
@@ -178,6 +252,7 @@
       .path { grid-template-columns: 1fr 1fr; }
       .qr-tile { grid-template-columns: 1fr; }
       .qr-tile .qr-frame { justify-self: start; }
+      .motion-scene { grid-template-columns: minmax(210px, .8fr) minmax(0, 1.2fr); }
     }
     @media (max-width: 640px) {
       :root { --gap: 6px; }
@@ -224,6 +299,30 @@
       .qr-tile .qr-frame { max-width: 300px; }
       .footer { min-height: 120px; }
       .footer strong { font-size: 13vw; }
+      .motion-board { padding: 12px; }
+      .motion-nav { display: grid; grid-template-columns: repeat(3, 1fr); }
+      .motion-nav button { padding: 8px 5px; font-size: 13px; }
+      .motion-stage { min-height: 580px; }
+      .motion-scene { display: flex; flex-direction: column; align-items: stretch; padding: 18px; gap: 15px; }
+      .motion-copy { flex: 0 0 auto; gap: 9px; }
+      .motion-copy h3 { font-size: 30px; }
+      .motion-copy p { font-size: 15px; }
+      .motion-next { align-self: flex-start; }
+      .motion-art { height: 245px; flex: 1; }
+      .motion-card { padding: 12px; font-size: 14px; box-shadow: 7px 8px 0 #c6c8bd; }
+      .hot-card { width: 90%; height: 75px; top: 0; left: 5%; padding: 8px 12px; font-size: 12px; }
+      .hot-card small { margin-bottom: 4px; font-size: 10px; }
+      .hot-card:nth-child(1) { --x: 0; --y: 0px; --r: -2deg; }
+      .hot-card:nth-child(2) { --x: 0; --y: 82px; --r: 1deg; }
+      .hot-card:nth-child(3) { --x: 0; --y: 164px; --r: -1deg; }
+      .extract-card { height: 100px; }
+      .extract-card:nth-of-type(4), .extract-card:nth-of-type(5) { --y: 110px; }
+      .pain-slip { font-size: 11px; min-height: 70px; padding: 8px; }
+      .knowledge-card { height: 165px; }
+      .flip-wrap { height: 210px; }
+      .flip-face { padding: 15px; }
+      .script-lines { padding: 13px; font-size: 14px; }
+      .script-lines p { min-height: 40px; }
     }
   </style>
 </head>
@@ -235,26 +334,27 @@
       <nav class="nav-links tile" aria-label="页面导航">
         <a href="#modules">功能模块</a>
         <a href="#workflow">创作流程</a>
-        <a href="#offer">内测权益</a>
+        <a href="#motion">成果演示</a>
+        <a href="#offer">学习权益</a>
         <a href="#faq">常见问题</a>
       </nav>
-      <a class="join" href="#wechat">加入内测</a>
+      <a class="join" href="#wechat">了解加入方式</a>
     </header>
 
     <main id="main">
-      <section class="hero" id="top" aria-label="Short Video Ops 内测介绍">
+      <section class="hero" id="top" aria-label="Short Video Ops 产品介绍">
         <div class="tile hero-name">
           <h1><span>Short</span><span>Video Ops</span></h1>
           <p>把短视频创作，收进自己的 Obsidian 工作台。</p>
         </div>
         <div class="tile hero-statement">
           <p>让每一次选题、创作与复盘，都有迹可循。</p>
-          <p>本地 Markdown 内容，连接知识、脚本、发布记录与反馈。</p>
+          <p>一年答疑教学内容，让你拥有制作同款智能体的能力。</p>
         </div>
         <div class="tile hero-price">
-          <div><strong>¥299</strong><p class="price-copy">内测价 · 原价 <s>¥699</s></p></div>
-          <div><p>仅开放 10 个名额，招满即停</p><a class="join" href="#wechat">加入内测</a></div>
-          <small>插件 + 三个月学习权益</small>
+          <div><strong>¥299</strong><p class="price-copy">现价 · 原价 <s>¥699</s></p></div>
+          <div><p>带着自己的创作问题，开始动手实践</p><a class="join" href="#wechat">了解加入方式</a></div>
+          <small>插件 + 一年答疑教学内容</small>
         </div>
         <div class="tile hero-flow">
           <h2>从灵感到复盘</h2>
@@ -277,6 +377,76 @@
         <figure class="tile"><img src="landing-assets/creator-triptych.png" width="2172" height="724" alt="对照纸面分镜复查创作安排" loading="lazy"></figure>
       </div>
 
+      <section class="section" id="motion" aria-labelledby="motion-title">
+        <div class="section-heading"><h2 id="motion-title">从真实素材，到可回看的作品</h2><p>点选一个步骤，看热点、对标、痛点与个人知识如何进入选题和脚本。</p></div>
+        <div class="tile motion-board">
+          <div class="motion-nav" aria-label="成果演示步骤">
+            <button type="button" data-motion="hot" aria-pressed="true">01 获取热点</button>
+            <button type="button" data-motion="extract" aria-pressed="false">02 对标提取</button>
+            <button type="button" data-motion="pain" aria-pressed="false">03 痛点日报</button>
+            <button type="button" data-motion="knowledge" aria-pressed="false">04 知识卡片</button>
+            <button type="button" data-motion="topic" aria-pressed="false">05 正式 Topic</button>
+            <button type="button" data-motion="script" aria-pressed="false">06 视频脚本</button>
+          </div>
+          <div class="motion-stage" aria-live="polite">
+            <article class="motion-scene is-active" data-scene="hot">
+              <div class="motion-copy"><small>01 / 热点获取与分析</small><h3>从多源热点里，看到内容机会。</h3><p>当前样本归一化为 34 条候选；部分来源未成功，候选还需要判断与筛选。</p><button class="motion-next" type="button">查看对标提取 ↗</button></div>
+              <div class="motion-art" aria-hidden="true">
+                <div class="motion-card hot-card" style="--i:0"><small>SOURCE 01</small>演唱会黄牛一个月获利 100 万</div>
+                <div class="motion-card hot-card" style="--i:1"><small>SOURCE 02</small>新能源汽车维修“一件难求”</div>
+                <div class="motion-card hot-card" style="--i:2"><small>SOURCE 03</small>3A 老游戏被 AI 反编译并移植网页端</div>
+                <div class="motion-badge">34 条候选</div>
+              </div>
+            </article>
+            <article class="motion-scene" data-scene="extract" hidden>
+              <div class="motion-copy"><small>02 / 对标视频与评论</small><h3>一个链接，拆成四份可用材料。</h3><p>逐字稿、结构化笔记、分析报告与评论分析，保留在自己的知识库里。</p><button class="motion-next" type="button">查看痛点日报 ↗</button></div>
+              <div class="motion-art" aria-hidden="true">
+                <div class="extract-link">对标样本 · 姜胡说　→　提取完整内容</div>
+                <div class="motion-card extract-card" style="--i:0"><small>OUTPUT 01</small>逐字稿</div>
+                <div class="motion-card extract-card" style="--i:1"><small>OUTPUT 02</small>结构化笔记</div>
+                <div class="motion-card extract-card" style="--i:2"><small>OUTPUT 03</small>分析报告</div>
+                <div class="motion-card extract-card" style="--i:3"><small>OUTPUT 04</small>评论分析</div>
+              </div>
+            </article>
+            <article class="motion-scene" data-scene="pain" hidden>
+              <div class="motion-copy"><small>03 / 今日痛点与正式痛点库</small><h3>日报记录信号，正式库留住依据。</h3><p>11 月 3 日日报记录观察；选中的既有正式痛点来自 10 月 26 日，来源和状态可回看。</p><button class="motion-next" type="button">查看知识卡片 ↗</button></div>
+              <div class="motion-art" aria-hidden="true">
+                <div class="pain-window"><div class="pain-stream">
+                  <div class="pain-column"><div class="pain-slip">教程型内容：高收藏、低完播</div><div class="pain-slip">开场 5 秒留存成为瓶颈</div><div class="pain-slip">评论中的顾虑可作选题</div></div>
+                  <div class="pain-column"><div class="pain-slip">长口播与观看耐心错配</div><div class="pain-slip">观众反复索取模板与成品</div><div class="pain-slip">知识工具视频：中段信息流失</div></div>
+                  <div class="pain-column"><div class="pain-slip">听得懂但不会做</div><div class="pain-slip">需要可照做的最小闭环</div><div class="pain-slip">方法论到能跑起来</div></div>
+                </div></div>
+                <div class="pain-picked">正式痛点：方法论 → 能跑起来的最后一公里</div>
+              </div>
+            </article>
+            <article class="motion-scene" data-scene="knowledge" hidden>
+              <div class="motion-copy"><small>04 / 个人笔记与知识卡</small><h3>把日常笔记，沉淀为创作证据。</h3><p>真实概念与个人笔记可整理为知识卡；示例知识卡仍是草稿，来源会保留。</p><button class="motion-next" type="button">查看正式 Topic ↗</button></div>
+              <div class="motion-art" aria-hidden="true">
+                <div class="motion-card knowledge-card" style="--i:0"><small>CONCEPT 01</small>本地知识库</div>
+                <div class="motion-card knowledge-card" style="--i:1"><small>CONCEPT 02</small>边用边学</div>
+                <div class="motion-card knowledge-card" style="--i:2"><small>NOTE 03</small>知识库要服务于业务</div>
+                <div class="motion-card knowledge-card" style="--i:3"><small>CONCEPT 04</small>Markdown</div>
+                <div class="knowledge-output">个人笔记 → 知识卡草稿</div>
+              </div>
+            </article>
+            <article class="motion-scene" data-scene="topic" hidden>
+              <div class="motion-copy"><small>05 / 候选到正式 Topic</small><h3>候选翻成有证据的选题。</h3><p>这是一条独立的真实记录：策略 v1、正式 Pain 与 4 条知识引用已绑定。</p><button class="motion-next" type="button">查看视频脚本 ↗</button></div>
+              <div class="motion-art" aria-hidden="true">
+                <div class="flip-wrap"><div class="flip-face"><small>CANDIDATE / 候选</small><strong>我拒了 1100 一条的商单</strong></div><div class="flip-face back"><small>TOPIC / 正式选题</small><strong>拒了豆包 1100 一条的商单：普通人下班学 AI，怎么把个人 IP 跑成报价</strong></div></div>
+                <div class="knowledge-output">策略 v1 · 正式 Pain · 4 条知识引用</div>
+              </div>
+            </article>
+            <article class="motion-scene" data-scene="script" hidden>
+              <div class="motion-copy"><small>06 / Video 与脚本</small><h3>脚本进入可追踪的版本流。</h3><p>示例由人工编辑并冻结为 v3，随后进入七维盲评；当前仍待发布，发布由创作者决定。</p><button class="motion-next" type="button">从热点再看一遍 ↗</button></div>
+              <div class="motion-art" aria-hidden="true">
+                <div class="script-page"><div class="script-bar">SCRIPT / FROZEN V3 · 人工编辑</div><div class="script-lines"><p>五条视频都得全程录屏，我还不能出镜！</p><p>第一条商单来了，对方出 5500 块，让我拍 5 条视频。</p><p>我白天上班，下班后学 AI、拍视频。</p><p>脚本审核通过了，结果卡在一个要求上。</p></div></div>
+                <div class="script-history">Topic → Video → 人工编辑 → 冻结 v3</div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="modules" aria-labelledby="modules-title">
         <div class="section-heading"><h2 id="modules-title">七大模块，围绕一条创作线</h2></div>
         <div class="module-board">
@@ -297,22 +467,21 @@
       <section class="section" id="workflow" aria-labelledby="workflow-title">
         <div class="section-heading"><h2 id="workflow-title">一条能回看的创作路径</h2><p>每一段工作都留下依据，发布后的结果继续帮助下一条内容。</p></div>
         <div class="path">
-          <article class="tile"><h3>确定方向</h3><p>梳理账号定位、受众痛点、已有知识与外部参考，让选题有来源。</p></article>
-          <article class="tile"><h3>组织创作</h3><p>在单视频工作台中管理脚本、拍摄准备与发布信息。</p></article>
-          <article class="tile"><h3>回收表现</h3><p>发布后由你主动采集数据，比较原先判断与真实表现。</p></article>
-          <article class="tile"><h3>沉淀方法</h3><p>把复盘变成受众观察、稳定写法和长期可用的知识资产。</p></article>
+          <article class="tile" style="--step:1"><h3>确定方向</h3><p>梳理账号定位、受众痛点、已有知识与外部参考，让选题有来源。</p></article>
+          <article class="tile" style="--step:2"><h3>组织创作</h3><p>在单视频工作台中管理脚本、拍摄准备与发布信息。</p></article>
+          <article class="tile" style="--step:3"><h3>回收表现</h3><p>发布后由你主动采集数据，比较原先判断与真实表现。</p></article>
+          <article class="tile" style="--step:4"><h3>沉淀方法</h3><p>把复盘变成受众观察、稳定写法和长期可用的知识资产。</p></article>
         </div>
       </section>
 
       <section class="section" id="offer" aria-labelledby="offer-title">
         <div class="offer">
-          <div class="tile offer-main"><h2 id="offer-title">首批内测，只开放 10 人</h2><div><p>原价 <s>¥699</s>　内测价</p><div class="offer-price">¥299</div></div><a class="join" href="#wechat">加入内测</a></div>
+          <div class="tile offer-main"><h2 id="offer-title">一年答疑教学，学会制作同款智能体</h2><div><p>原价 <s>¥699</s>　现价</p><div class="offer-price">¥299</div></div><a class="join" href="#wechat">了解加入方式</a></div>
           <div class="tile offer-includes"><h3>一次加入，获得这些权益</h3><div class="include-list">
-            <div><strong>Short Video Ops 插件</strong><p>在 Obsidian 中使用短视频创作与复盘工作流。</p></div>
-            <div><strong>三个月社群权益</strong><p>与同批创作者交流实践问题和作品进展。</p></div>
-            <div><strong>付费直播课观看资格</strong><p>课程覆盖编程基础、AI 基础、GitHub 基础和 AI 工具使用。</p></div>
-            <div><strong>一对一 AI 学习辅导</strong><p>围绕你的学习进度与作品方向，学习从零开始完成 Vibe Coding 作品。</p></div>
-          </div><p class="offer-note">内测服务的具体安排以加入后的说明为准。</p></div>
+            <div><strong>永久体验插件最新版</strong><p>付费用户永久体验 Short Video Ops 最新版；基础版更新晚两个月。</p></div>
+            <div><strong>一年答疑教学内容</strong><p>围绕实际制作过程答疑，覆盖编程、AI、GitHub 与 AI 工具基础。</p></div>
+            <div><strong>学习制作同款智能体</strong><p>沿着插件的实际工作流，从基础到动手实践，逐步掌握制作方法。</p></div>
+          </div><p class="offer-note">教学与答疑的具体安排请添加微信了解。</p></div>
         </div>
       </section>
 
@@ -321,17 +490,18 @@
         <div class="faq-list">
           <details class="tile"><summary>零基础可以参加吗？</summary><p>可以。学习内容从编程、AI 与 GitHub 基础开始，再结合 AI 工具练习，逐步推进自己的 Vibe Coding 作品。</p></details>
           <details class="tile"><summary>插件需要什么环境？</summary><p>插件运行在 Obsidian 中。涉及本地 CLI、Python 或平台采集的功能需要桌面端及相应环境；移动端主要用于只读查看。</p></details>
+          <details class="tile"><summary>付费版与基础版的更新有什么区别？</summary><p>付费用户永久体验插件最新版；基础版比付费版晚两个月更新。</p></details>
           <details class="tile"><summary>插件会自动帮我发布视频吗？</summary><p>不会。发布信息由你登记；平台登录、读取作品与数据采集也由你主动发起。</p></details>
-          <details class="tile"><summary>内测价包含多久的学习权益？</summary><p>包含三个月社群权益、付费直播课观看资格和一对一 AI 学习辅导。具体课程与辅导安排请添加微信咨询。</p></details>
+          <details class="tile"><summary>学习与答疑权益有多久？</summary><p>包含一年答疑教学内容，帮助你学习制作同款智能体。具体安排请添加微信咨询。</p></details>
         </div>
       </section>
 
       <section class="section contact" id="wechat" aria-labelledby="wechat-title">
-        <div class="tile contact-copy"><h2 id="wechat-title">加入首批内测</h2><p>扫描二维码添加微信，了解内测安排与加入方式。</p><p class="contact-instruction">添加后，请发送 <strong>“内测”</strong></p><p class="contact-meta">内测价 ¥299 · 仅开放 10 个名额</p></div>
-        <div class="tile qr-tile"><div><h3>微信联系</h3><p>电脑端用微信扫一扫；手机端长按二维码识别。</p></div><a class="qr-frame" href="landing-assets/wechat-qr.png" target="_blank" rel="noopener" aria-label="打开微信二维码大图"><img src="landing-assets/wechat-qr.png" width="523" height="529" alt="加入 Short Video Ops 内测的微信二维码"></a></div>
+        <div class="tile contact-copy"><h2 id="wechat-title">学习制作同款智能体</h2><p>扫描二维码添加微信，了解一年答疑教学内容与加入方式。</p><p class="contact-instruction">添加后，请发送 <strong>“智能体”</strong></p><p class="contact-meta">现价 ¥299 · 含插件与一年答疑教学内容</p></div>
+        <div class="tile qr-tile"><div><h3>微信联系</h3><p>电脑端用微信扫一扫；手机端长按二维码识别。</p></div><a class="qr-frame" href="landing-assets/wechat-qr.png" target="_blank" rel="noopener" aria-label="打开微信二维码大图"><img src="landing-assets/wechat-qr.png" width="523" height="529" alt="咨询 Short Video Ops 一年答疑教学的微信二维码"></a></div>
       </section>
     </main>
-    <footer class="footer tile"><p>Short Video Ops · Obsidian 社区插件内测</p><strong>Short Video Ops</strong></footer>
+    <footer class="footer tile"><p>Short Video Ops · 短视频创作与复盘工作台</p><strong>Short Video Ops</strong></footer>
   </div>
   <script>
     const modules = {
@@ -344,6 +514,52 @@
       knowledge: ["知识引擎", "把日常笔记、知识卡片与复盘所得连接起来，积累可以反复使用的创作材料。", "让经验留在自己的知识库。", ["沉淀可回看的知识卡片", "保留观点与来源的联系", "复用笔记和复盘经验"]]
     };
     const detail = document.querySelector(".module-detail");
+    const motionBoard = document.querySelector(".motion-board");
+    const motionButtons = [...motionBoard.querySelectorAll("[data-motion]")];
+    const motionScenes = [...motionBoard.querySelectorAll("[data-scene]")];
+    const scriptLines = [...motionBoard.querySelectorAll(".script-lines p")];
+    const scriptText = scriptLines.map((line) => line.textContent);
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let motionIndex = 0;
+    let motionTimer;
+    let typingTimer;
+    let motionPaused = false;
+    function showMotion(index) {
+      clearInterval(typingTimer);
+      motionIndex = (index + motionScenes.length) % motionScenes.length;
+      motionButtons.forEach((button, i) => button.setAttribute("aria-pressed", String(i === motionIndex)));
+      motionScenes.forEach((scene, i) => {
+        scene.hidden = i !== motionIndex;
+        scene.classList.remove("is-active");
+      });
+      const current = motionScenes[motionIndex];
+      void current.offsetWidth;
+      current.classList.add("is-active");
+      scriptLines.forEach((line, i) => { line.textContent = motionIndex === 5 && !reduceMotion.matches ? "" : scriptText[i]; });
+      if (motionIndex === 5 && !reduceMotion.matches) {
+        let position = 0;
+        const combined = scriptText.join("\n");
+        typingTimer = setInterval(() => {
+          position = Math.min(combined.length, position + 2);
+          const visible = combined.slice(0, position).split("\n");
+          scriptLines.forEach((line, i) => { line.textContent = visible[i] || ""; });
+          if (position === combined.length) clearInterval(typingTimer);
+        }, 24);
+      }
+    }
+    motionButtons.forEach((button, i) => button.addEventListener("click", () => showMotion(i)));
+    motionScenes.forEach((scene, i) => scene.querySelector(".motion-next").addEventListener("click", () => showMotion(i + 1)));
+    motionBoard.addEventListener("pointerenter", () => { motionPaused = true; });
+    motionBoard.addEventListener("pointerleave", () => { motionPaused = false; });
+    motionBoard.addEventListener("focusin", () => { motionPaused = true; });
+    motionBoard.addEventListener("focusout", (event) => { if (!motionBoard.contains(event.relatedTarget)) motionPaused = false; });
+    if (!reduceMotion.matches && "IntersectionObserver" in window) {
+      const motionObserver = new IntersectionObserver(([entry]) => {
+        clearInterval(motionTimer);
+        if (entry.isIntersecting) motionTimer = setInterval(() => { if (!motionPaused) showMotion(motionIndex + 1); }, 3900);
+      }, { threshold: .2 });
+      motionObserver.observe(motionBoard);
+    }
     document.querySelectorAll("[data-module]").forEach((button) => {
       button.addEventListener("click", () => {
         document.querySelector('[data-module][aria-pressed="true"]').setAttribute("aria-pressed", "false");
